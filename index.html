@@ -7,11 +7,7 @@
   <title>Parrot3D - 高品質3Dプリントサービス</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -20,8 +16,7 @@
 
     header {
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       z-index: 1000;
       display: flex;
@@ -66,8 +61,7 @@
 
     .slide {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       height: 100%;
       background-size: cover;
@@ -93,17 +87,8 @@
       padding: 0 15px;
     }
 
-    .arrow:hover {
-      background-color: rgba(0, 0, 0, 0.2);
-    }
-
-    .arrow.left {
-      left: 20px;
-    }
-
-    .arrow.right {
-      right: 20px;
-    }
+    .arrow.left { left: 20px; }
+    .arrow.right { right: 20px; }
 
     .products {
       display: grid;
@@ -236,3 +221,124 @@
     }
   </style>
 </head>
+<body>
+  <header id="header">
+    <div class="logo">Parrot3D</div>
+    <nav>
+      <a href="#">3D出力サービス</a>
+      <a href="#">購入先情報</a>
+      <a href="#">サポート</a>
+      <a href="#">ストア</a>
+      <a href="#">Parrot3Dについて</a>
+    </nav>
+  </header>
+
+  <div class="slider">
+    <button class="arrow left" id="prev">&#10094;</button>
+    <button class="arrow right" id="next">&#10095;</button>
+    <div class="slide active" style="background-image: url('slide1.jpg');"></div>
+    <div class="slide" style="background-image: url('slide2.jpg');"></div>
+    <div class="slide" style="background-image: url('slide3.jpg');"></div>
+  </div>
+
+  <section class="products">
+    <div class="product-card">
+      <img src="product1.jpg" alt="商品画像1" />
+      <div class="product-name">商品A</div>
+      <div class="product-price">¥2,500</div>
+    </div>
+    <div class="product-card">
+      <img src="product2.jpg" alt="商品画像2" />
+      <div class="product-name">商品B</div>
+      <div class="product-price">¥3,000</div>
+    </div>
+    <div class="product-card">
+      <img src="product3.jpg" alt="商品画像3" />
+      <div class="product-name">商品C</div>
+      <div class="product-price">¥1,800</div>
+    </div>
+    <div class="product-card">
+      <img src="product4.jpg" alt="商品画像4" />
+      <div class="product-name">商品D</div>
+      <div class="product-price">¥4,200</div>
+    </div>
+  </section>
+
+  <section class="video-section">
+    <video autoplay muted loop playsinline>
+      <source src="printing-process.mp4" type="video/mp4" />
+      お使いのブラウザは video タグをサポートしていません。
+    </video>
+    <h2>印刷工程の様子</h2>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-column">
+        <h3>概要</h3>
+        <a href="#">Parrot3Dについて</a>
+        <a href="#">支払い方法</a>
+        <a href="#">利用規約</a>
+      </div>
+      <div class="footer-column">
+        <h3>サポート</h3>
+        <a href="#">保障</a>
+        <a href="#">ヘルプセンター</a>
+        <a href="#">お問い合わせ</a>
+      </div>
+      <div class="footer-logo">
+        <div class="logo">Parrot3D</div>
+      </div>
+    </div>
+    <div class="footer-bottom">©2025 Parrot3D</div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > window.innerHeight - 80) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    let current = 0;
+    let slideInterval = setInterval(nextSlide, 5000);
+
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+    }
+
+    function nextSlide() {
+      current = (current + 1) % slides.length;
+      showSlide(current);
+    }
+
+    function prevSlide() {
+      current = (current - 1 + slides.length) % slides.length;
+      showSlide(current);
+    }
+
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      resetInterval();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      resetInterval();
+    });
+
+    function resetInterval() {
+      clearInterval(slideInterval);
+      slideInterval = setInterval(nextSlide, 5000);
+    }
+  </script>
+</body>
+</html>
