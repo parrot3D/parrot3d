@@ -3,77 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Parrot3Dは、信頼の3Dプリント出力サービスです。高品質・短納期・手頃な価格でお届けします。">
   <title>Parrot3D - 高品質3Dプリントサービス</title>
+  <meta name="description" content="Parrot3Dは、信頼の3Dプリント出力サービスです。高品質・短納期・手頃な価格でお届けします。">
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      line-height: 1.6;
-    }
+    body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; overflow-x: hidden; }
 
-    header {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      z-index: 1000;
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 20px 40px;
-      color: white;
-      transition: background-color 0.3s, color 0.3s;
       background-color: transparent;
     }
 
-    header.scrolled {
-      background-color: white;
-      color: black;
-    }
-
-    .logo {
-      font-size: 1.8em;
-      font-weight: bold;
-    }
-
-    .menu-toggle {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-
-    .menu-toggle div {
-      width: 25px;
-      height: 3px;
-      background-color: white;
-      margin: 4px 0;
-      transition: 0.4s;
-    }
-
-    nav {
+    .header nav {
       display: flex;
       gap: 20px;
     }
 
-    nav a {
+    .header nav a {
+      color: #000;
       text-decoration: none;
-      color: inherit;
-      font-weight: 500;
-      white-space: nowrap;
+      font-weight: bold;
+    }
+
+    .hamburger-morph {
+      display: none;
+      background: transparent;
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      .header nav {
+        display: none;
+      }
+      .hamburger-morph {
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 1001;
+      }
+    }
+
+    .hamburger-morph__icon .hamburger-morph__line {
+      stroke: #fff;
+    }
+
+    .nav-morph {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(29, 29, 31, 0.98);
+      z-index: 1000;
+    }
+
+    .nav-morph.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-morph__list {
+      list-style: none;
+      text-align: center;
+    }
+
+    .nav-morph__item a {
+      color: white;
+      font-size: 24px;
+      display: block;
+      margin: 20px 0;
+      text-decoration: none;
     }
 
     .slider {
-      position: relative;
       width: 100%;
       aspect-ratio: 16/9;
+      position: relative;
       overflow: hidden;
-      z-index: 0;
     }
 
     .slide {
       position: absolute;
-      top: 0; left: 0;
       width: 100%;
       height: 100%;
       background-size: cover;
@@ -90,14 +107,13 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 3em;
+      font-size: 2em;
       color: white;
-      background-color: rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.5);
       border: none;
       cursor: pointer;
+      padding: 10px;
       z-index: 10;
-      padding: 0 15px;
-      border-radius: 5px;
     }
 
     .arrow.left { left: 20px; }
@@ -106,147 +122,81 @@
     .products {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 0;
-      padding: 0;
-      background-color: white;
-      width: 100vw;
-      height: auto;
-      z-index: 2;
-      position: relative;
+      grid-auto-rows: auto;
+      gap: 20px;
+      padding: 20px;
+      background-color: #fff;
     }
 
     .product-card {
       width: 100%;
       aspect-ratio: 1 / 1;
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
     }
 
     .product-card img {
-      width: 90%;
-      height: 90%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      transition: transform 0.4s ease;
+      transition: transform 0.3s ease;
     }
 
     .product-card:hover img {
       transform: scale(1.05);
     }
 
-    .product-name, .product-price {
-      display: none;
-    }
-
     .video-section {
       position: relative;
-      height: 100vh;
-      overflow: hidden;
-      z-index: 1;
+      width: 100%;
+      padding-top: 56.25%;
     }
 
     .video-section video {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      z-index: 0;
+      object-fit: contain;
     }
 
     .video-section h2 {
-      position: relative;
-      z-index: 1;
-      color: white;
+      position: absolute;
+      top: 30%;
+      width: 100%;
       text-align: center;
-      padding-top: 180px;
+      color: white;
       font-size: 2em;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
-    }
-
-    footer {
-      background-color: #333;
-      color: white;
-      padding: 40px 20px 20px;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 20px;
-      text-align: left;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .footer-column h3 {
-      margin-bottom: 10px;
-    }
-
-    .footer-column a {
-      display: block;
-      margin-bottom: 5px;
-      color: white;
-      text-decoration: none;
-    }
-
-    .footer-logo {
-      text-align: right;
-    }
-
-    .footer-bottom {
-      text-align: center;
-      margin-top: 30px;
-      font-size: 0.9em;
-      color: #ccc;
-    }
-
-    @media (max-width: 768px) {
-      .menu-toggle { display: flex; }
-      nav {
-        display: none;
-        flex-direction: column;
-        background: #111;
-        position: absolute;
-        top: 60px;
-        left: 0;
-        width: 100%;
-        padding: 10px 20px;
-      }
-
-      nav.active { display: flex; }
-
-      nav a {
-        color: white;
-        margin: 10px 0;
-      }
-
-      .products {
-        grid-template-columns: 1fr;
-        height: auto;
-      }
     }
   </style>
 </head>
 <body>
-  <header id="header">
-    <div class="logo">Parrot3D</div>
-    <div class="menu-toggle" id="menu-toggle">
-      <div></div>
-      <div></div>
-      <div></div>
+  <div class="header">
+    <div class="nav-desktop">
+      <nav>
+        <a href="#">購入先情報</a>
+        <a href="#">サポート</a>
+        <a href="#">ストア</a>
+      </nav>
     </div>
-    <nav id="nav-menu">
-      <a href="#">3D出力サービス</a>
-      <a href="#">購入先情報</a>
-      <a href="#">サポート</a>
-      <a href="#">ストア</a>
-      <a href="#">Parrot3Dについて</a>
-    </nav>
-  </header>
+    <button class="hamburger-morph" aria-label="メニュー">
+      <svg class="hamburger-morph__icon" viewBox="0 0 100 100" width="40" height="40">
+        <path class="hamburger-morph__line" d="M 20,29 H 80" stroke-width="6" />
+        <path class="hamburger-morph__line" d="M 20,50 H 80" stroke-width="6" />
+        <path class="hamburger-morph__line" d="M 20,71 H 80" stroke-width="6" />
+      </svg>
+    </button>
+  </div>
+  <nav class="nav-morph">
+    <ul class="nav-morph__list">
+      <li class="nav-morph__item"><a href="#">購入先情報</a></li>
+      <li class="nav-morph__item"><a href="#">サポート</a></li>
+      <li class="nav-morph__item"><a href="#">ストア</a></li>
+    </ul>
+  </nav>
 
   <div class="slider">
     <button class="arrow left" id="prev">&#10094;</button>
@@ -257,59 +207,21 @@
   </div>
 
   <section class="products">
-    <div class="product-card">
-      <img src="product1.jpg" alt="商品画像1" />
-    </div>
-    <div class="product-card">
-      <img src="product2.jpg" alt="商品画像2" />
-    </div>
-    <div class="product-card">
-      <img src="product3.jpg" alt="商品画像3" />
-    </div>
-    <div class="product-card">
-      <img src="product4.jpg" alt="商品画像4" />
-    </div>
+    <div class="product-card"><img src="product1.jpg" alt="商品画像1"></div>
+    <div class="product-card"><img src="product2.jpg" alt="商品画像2"></div>
+    <div class="product-card"><img src="product3.jpg" alt="商品画像3"></div>
+    <div class="product-card"><img src="product4.jpg" alt="商品画像4"></div>
   </section>
 
   <section class="video-section">
     <video autoplay muted loop playsinline>
-      <source src="printing-process.mp4" type="video/mp4" />
-      お使いのブラウザは video タグをサポートしていません。
+      <source src="printing-process.mp4" type="video/mp4">
     </video>
     <h2>印刷工程の様子</h2>
   </section>
 
-  <footer>
-    <div class="footer-grid">
-      <div class="footer-column">
-        <h3>概要</h3>
-        <a href="#">Parrot3Dについて</a>
-        <a href="#">支払い方法</a>
-        <a href="#">利用規約</a>
-      </div>
-      <div class="footer-column">
-        <h3>サポート</h3>
-        <a href="#">保障</a>
-        <a href="#">ヘルプセンター</a>
-        <a href="#">お問い合わせ</a>
-      </div>
-      <div class="footer-logo">
-        <div class="logo">Parrot3D</div>
-      </div>
-    </div>
-    <div class="footer-bottom">©2025 Parrot3D</div>
-  </footer>
-
   <script>
-    const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > window.innerHeight - 80) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    });
-
+    // スライダー
     const slides = document.querySelectorAll('.slide');
     const prevBtn = document.getElementById('prev');
     const nextBtn = document.getElementById('next');
@@ -317,9 +229,7 @@
     let slideInterval = setInterval(nextSlide, 5000);
 
     function showSlide(index) {
-      slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
-      });
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
     }
 
     function nextSlide() {
@@ -332,25 +242,20 @@
       showSlide(current);
     }
 
-    nextBtn.addEventListener('click', () => {
-      nextSlide();
-      resetInterval();
-    });
-
-    prevBtn.addEventListener('click', () => {
-      prevSlide();
-      resetInterval();
-    });
+    nextBtn.addEventListener('click', () => { nextSlide(); resetInterval(); });
+    prevBtn.addEventListener('click', () => { prevSlide(); resetInterval(); });
 
     function resetInterval() {
       clearInterval(slideInterval);
       slideInterval = setInterval(nextSlide, 5000);
     }
 
-    const menuToggle = document.getElementById('menu-toggle');
-    const navMenu = document.getElementById('nav-menu');
-    menuToggle.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
+    // ハンバーガー
+    const hamburger = document.querySelector('.hamburger-morph');
+    const nav = document.querySelector('.nav-morph');
+
+    hamburger.addEventListener('click', () => {
+      nav.classList.toggle('active');
     });
   </script>
 </body>
