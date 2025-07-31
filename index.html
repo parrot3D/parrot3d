@@ -8,9 +8,18 @@
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; overflow-x: hidden; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
     .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -18,74 +27,131 @@
       background-color: transparent;
     }
 
-    .header nav {
-      display: flex;
-      gap: 20px;
-    }
-
-    .header nav a {
-      color: #000;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
     .hamburger-morph {
-      display: none;
-      background: transparent;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1001;
+      width: 48px;
+      height: 48px;
+      padding: 0;
       border: none;
+      background: transparent;
+      cursor: pointer;
     }
 
-    @media (max-width: 768px) {
-      .header nav {
-        display: none;
-      }
-      .hamburger-morph {
-        display: block;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        z-index: 1001;
-      }
+    .hamburger-morph__icon {
+      width: 100%;
+      height: 100%;
     }
 
-    .hamburger-morph__icon .hamburger-morph__line {
-      stroke: #fff;
+    .hamburger-morph__line {
+      fill: none;
+      stroke: #000;
+      stroke-width: 6;
+      transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+                  stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hamburger-morph__line:nth-child(1) { stroke-dasharray: 60 207; }
+    .hamburger-morph__line:nth-child(2) { stroke-dasharray: 60 60; }
+    .hamburger-morph__line:nth-child(3) { stroke-dasharray: 60 207; }
+
+    .hamburger-morph.active .hamburger-morph__line:nth-child(1) {
+      stroke-dasharray: 90 207;
+      stroke-dashoffset: -134;
+    }
+
+    .hamburger-morph.active .hamburger-morph__line:nth-child(2) {
+      stroke-dasharray: 1 60;
+      stroke-dashoffset: -30;
+    }
+
+    .hamburger-morph.active .hamburger-morph__line:nth-child(3) {
+      stroke-dasharray: 90 207;
+      stroke-dashoffset: -134;
     }
 
     .nav-morph {
-      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100vh;
       background: rgba(29, 29, 31, 0.98);
+      clip-path: circle(0% at calc(100% - 44px) 44px);
+      transition: clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 1000;
     }
 
     .nav-morph.active {
+      clip-path: circle(150% at calc(100% - 44px) 44px);
+    }
+
+    .nav-morph__wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 100%;
+      height: 100%;
     }
 
     .nav-morph__list {
       list-style: none;
       text-align: center;
+      padding: 0;
     }
 
-    .nav-morph__item a {
-      color: white;
-      font-size: 24px;
-      display: block;
-      margin: 20px 0;
+    .nav-morph__item {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .nav-morph.active .nav-morph__item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .nav-morph.active .nav-morph__item:nth-child(1) { transition-delay: 0.3s; }
+    .nav-morph.active .nav-morph__item:nth-child(2) { transition-delay: 0.4s; }
+    .nav-morph.active .nav-morph__item:nth-child(3) { transition-delay: 0.5s; }
+    .nav-morph.active .nav-morph__item:nth-child(4) { transition-delay: 0.6s; }
+
+    .nav-morph__link {
+      position: relative;
+      display: inline-block;
+      padding: 20px;
+      font-size: 28px;
+      color: #fff;
       text-decoration: none;
+      overflow: hidden;
+    }
+
+    .nav-morph__text, .nav-morph__hover {
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .nav-morph__hover {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+    }
+
+    .nav-morph__link:hover .nav-morph__text {
+      transform: translateY(-100%);
+    }
+
+    .nav-morph__link:hover .nav-morph__hover {
+      transform: translateY(-100%);
     }
 
     .slider {
+      position: relative;
       width: 100%;
       aspect-ratio: 16/9;
-      position: relative;
       overflow: hidden;
     }
 
@@ -107,13 +173,14 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 2em;
+      font-size: 3em;
       color: white;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.3);
       border: none;
       cursor: pointer;
-      padding: 10px;
       z-index: 10;
+      padding: 0 15px;
+      border-radius: 5px;
     }
 
     .arrow.left { left: 20px; }
@@ -121,27 +188,31 @@
 
     .products {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-auto-rows: auto;
+      grid-template-columns: repeat(2, 1fr) !important;
+      max-width: 1800px;
+      margin: 0 auto;
+      background-color: white;
+      width: 100%;
       gap: 20px;
-      padding: 20px;
-      background-color: #fff;
+      padding: 20px 0;
     }
 
     .product-card {
       width: 100%;
       aspect-ratio: 1 / 1;
-      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
 
     .product-card img {
-      width: 100%;
-      height: 100%;
+      width: 90%;
+      max-width: 900px;
+      height: auto;
       object-fit: cover;
-      transition: transform 0.3s ease;
+      display: block;
+      transition: transform 0.4s ease;
     }
 
     .product-card:hover img {
@@ -170,33 +241,87 @@
       text-align: center;
       color: white;
       font-size: 2em;
+      z-index: 2;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      padding: 40px 20px 20px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .footer-column h3 {
+      margin-bottom: 10px;
+    }
+
+    .footer-column a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      margin-bottom: 5px;
+    }
+
+    .footer-logo {
+      text-align: right;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #ccc;
+    }
+
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .footer-logo {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .products {
+        grid-template-columns: 1fr !important;
+        max-width: 100%;
+        gap: 10px;
+        padding: 10px 0;
+      }
+      .product-card img {
+        width: 100%;
+        height: auto;
+      }
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <div class="nav-desktop">
-      <nav>
-        <a href="#">購入先情報</a>
-        <a href="#">サポート</a>
-        <a href="#">ストア</a>
-      </nav>
-    </div>
-    <button class="hamburger-morph" aria-label="メニュー">
-      <svg class="hamburger-morph__icon" viewBox="0 0 100 100" width="40" height="40">
-        <path class="hamburger-morph__line" d="M 20,29 H 80" stroke-width="6" />
-        <path class="hamburger-morph__line" d="M 20,50 H 80" stroke-width="6" />
-        <path class="hamburger-morph__line" d="M 20,71 H 80" stroke-width="6" />
+    <button class="hamburger-morph" aria-label="メニュー" aria-controls="morph-menu" aria-expanded="false">
+      <svg class="hamburger-morph__icon" viewBox="0 0 100 100">
+        <path class="hamburger-morph__line" d="M 20,29 H 80 C 80,29 94.5,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" />
+        <path class="hamburger-morph__line" d="M 20,50 H 80" />
+        <path class="hamburger-morph__line" d="M 20,71 H 80 C 80,71 94.5,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" />
       </svg>
     </button>
+    <nav id="morph-menu" class="nav-morph" aria-hidden="true">
+      <div class="nav-morph__wrapper">
+        <ul class="nav-morph__list">
+          <li class="nav-morph__item"><a href="#" class="nav-morph__link"><span class="nav-morph__text">Home</span><span class="nav-morph__hover">ホーム</span></a></li>
+          <li class="nav-morph__item"><a href="#" class="nav-morph__link"><span class="nav-morph__text">About</span><span class="nav-morph__hover">私たちについて</span></a></li>
+          <li class="nav-morph__item"><a href="#" class="nav-morph__link"><span class="nav-morph__text">Works</span><span class="nav-morph__hover">制作実績</span></a></li>
+          <li class="nav-morph__item"><a href="#" class="nav-morph__link"><span class="nav-morph__text">Contact</span><span class="nav-morph__hover">お問い合わせ</span></a></li>
+        </ul>
+      </div>
+    </nav>
   </div>
-  <nav class="nav-morph">
-    <ul class="nav-morph__list">
-      <li class="nav-morph__item"><a href="#">購入先情報</a></li>
-      <li class="nav-morph__item"><a href="#">サポート</a></li>
-      <li class="nav-morph__item"><a href="#">ストア</a></li>
-    </ul>
-  </nav>
 
   <div class="slider">
     <button class="arrow left" id="prev">&#10094;</button>
@@ -207,18 +332,38 @@
   </div>
 
   <section class="products">
-    <div class="product-card"><img src="product1.jpg" alt="商品画像1"></div>
-    <div class="product-card"><img src="product2.jpg" alt="商品画像2"></div>
-    <div class="product-card"><img src="product3.jpg" alt="商品画像3"></div>
-    <div class="product-card"><img src="product4.jpg" alt="商品画像4"></div>
+    <div class="product-card"><img src="product1.jpg" alt="商品画像1" /></div>
+    <div class="product-card"><img src="product2.jpg" alt="商品画像2" /></div>
+    <div class="product-card"><img src="product3.jpg" alt="商品画像3" /></div>
+    <div class="product-card"><img src="product4.jpg" alt="商品画像4" /></div>
   </section>
 
   <section class="video-section">
     <video autoplay muted loop playsinline>
-      <source src="printing-process.mp4" type="video/mp4">
+      <source src="printing-process.mp4" type="video/mp4" />
+      お使いのブラウザは video タグをサポートしていません。
     </video>
     <h2>印刷工程の様子</h2>
   </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-column">
+        <h3>概要</h3>
+        <a href="#">Parrot3Dについて</a>
+        <a href="#">支払い方法</a>
+        <a href="#">利用規約</a>
+      </div>
+      <div class="footer-column">
+        <h3>サポート</h3>
+        <a href="#">保障</a>
+        <a href="#">ヘルプセンター</a>
+        <a href="#">お問い合わせ</a>
+      </div>
+      <div class="footer-logo"><div class="logo">Parrot3D</div></div>
+    </div>
+    <div class="footer-bottom">©2025 Parrot3D</div>
+  </footer>
 
   <script>
     // スライダー
@@ -229,7 +374,9 @@
     let slideInterval = setInterval(nextSlide, 5000);
 
     function showSlide(index) {
-      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
     }
 
     function nextSlide() {
@@ -242,8 +389,15 @@
       showSlide(current);
     }
 
-    nextBtn.addEventListener('click', () => { nextSlide(); resetInterval(); });
-    prevBtn.addEventListener('click', () => { prevSlide(); resetInterval(); });
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      resetInterval();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      resetInterval();
+    });
 
     function resetInterval() {
       clearInterval(slideInterval);
@@ -251,11 +405,18 @@
     }
 
     // ハンバーガー
-    const hamburger = document.querySelector('.hamburger-morph');
-    const nav = document.querySelector('.nav-morph');
+    document.addEventListener('DOMContentLoaded', () => {
+      const hamburger = document.querySelector('.hamburger-morph');
+      const nav = document.querySelector('.nav-morph');
 
-    hamburger.addEventListener('click', () => {
-      nav.classList.toggle('active');
+      hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        nav.classList.toggle('active');
+        const isOpen = hamburger.classList.contains('active');
+        hamburger.setAttribute('aria-expanded', isOpen);
+        nav.setAttribute('aria-hidden', !isOpen);
+        document.Abody.style.overflow = isOpen ? 'hidden' : '';
+      });
     });
   </script>
 </body>
