@@ -6,6 +6,9 @@
   <title>Parrot3D - 高品質3Dプリントサービス</title>
   <meta name="description" content="Parrot3Dは、信頼の3Dプリント出力サービスです。高品質・短納期・手頃な価格でお届けします。">
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -27,11 +30,12 @@
       background-color: transparent;
     }
 
+    /* === ハンバーガー & ナブモーフ（差し替え分） === */
     .hamburger-morph {
       position: fixed;
       top: 20px;
       right: 20px;
-      z-index: 1001;
+      z-index: 1000;
       width: 48px;
       height: 48px;
       padding: 0;
@@ -53,9 +57,17 @@
                   stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .hamburger-morph__line:nth-child(1) { stroke-dasharray: 60 207; }
-    .hamburger-morph__line:nth-child(2) { stroke-dasharray: 60 60; }
-    .hamburger-morph__line:nth-child(3) { stroke-dasharray: 60 207; }
+    .hamburger-morph__line:nth-child(1) {
+      stroke-dasharray: 60 207;
+    }
+
+    .hamburger-morph__line:nth-child(2) {
+      stroke-dasharray: 60 60;
+    }
+
+    .hamburger-morph__line:nth-child(3) {
+      stroke-dasharray: 60 207;
+    }
 
     .hamburger-morph.active .hamburger-morph__line:nth-child(1) {
       stroke-dasharray: 90 207;
@@ -81,7 +93,7 @@
       background: rgba(29, 29, 31, 0.98);
       clip-path: circle(0% at calc(100% - 44px) 44px);
       transition: clip-path 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 1000;
+      z-index: 900;
     }
 
     .nav-morph.active {
@@ -97,9 +109,10 @@
     }
 
     .nav-morph__list {
+      margin: 0;
+      padding: 0;
       list-style: none;
       text-align: center;
-      padding: 0;
     }
 
     .nav-morph__item {
@@ -128,7 +141,8 @@
       overflow: hidden;
     }
 
-    .nav-morph__text, .nav-morph__hover {
+    .nav-morph__text,
+    .nav-morph__hover {
       display: block;
       transition: transform 0.3s ease;
     }
@@ -138,6 +152,7 @@
       top: 100%;
       left: 0;
       width: 100%;
+      transform: translateY(0%);
     }
 
     .nav-morph__link:hover .nav-morph__text {
@@ -147,45 +162,179 @@
     .nav-morph__link:hover .nav-morph__hover {
       transform: translateY(-100%);
     }
+    /* === ハンバーガー & ナブモーフ（差し替え分ここまで） === */
 
-    .slider {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16/9;
-      overflow: hidden;
+    /* === 新スライダーCSS === */
+    html, body { height: 100%; }
+    .carousel, .item, .active { height: 100%; }
+    .carousel-inner { height: 100%; background: #000; }
+    .carousel-caption {
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
+      padding-bottom: 0;
+      text-align: center;
     }
-
-    .slide {
-      position: absolute;
+    h2 { font-size: 60px; }
+    p { padding: 10px; }
+    .fill {
       width: 100%;
       height: 100%;
-      background-size: cover;
       background-position: center;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
+      background-size: cover;
+      opacity: 0.6;
     }
-
-    .slide.active {
-      opacity: 1;
-    }
-
-    .arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 3em;
-      color: white;
-      background-color: rgba(0, 0, 0, 0.3);
-      border: none;
+    .btn-transparent {
+      background: transparent;
+      color: #fff;
+      border: 2px solid #fff;
       cursor: pointer;
-      z-index: 10;
-      padding: 0 15px;
-      border-radius: 5px;
+      display: inline-block;
+      transition: background-color 0.3s, color 0.3s;
+      text-decoration: none;
+      user-select: none;
+    }
+    .btn-transparent:hover {
+      background-color: #fff;
+      color: #000;
+    }
+    .btn-rounded {
+      border-radius: 70px;
+    }
+    .btn-large {
+      padding: 11px 45px;
+      font-size: 18px;
     }
 
-    .arrow.left { left: 20px; }
-    .arrow.right { right: 20px; }
+    /* ここから追加 */
+    /* アニメーション共通時間 */
+    .animated {
+      -webkit-animation-duration: 1.5s;
+      animation-duration: 1.5s;
+    }
 
+    /* fadeInRight: 右からフェードイン */
+    @-webkit-keyframes fadeInRight {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(100px, 0, 0);
+        transform: translate3d(100px, 0, 0);
+      }
+      to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+      }
+    }
+    @keyframes fadeInRight {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(100px, 0, 0);
+        transform: translate3d(100px, 0, 0);
+      }
+      to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+      }
+    }
+    .fadeInRight {
+      -webkit-animation-name: fadeInRight;
+      animation-name: fadeInRight;
+    }
+
+    /* fadeInLeft: 左からフェードイン */
+    @-webkit-keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(-100px, 0, 0);
+        transform: translate3d(-100px, 0, 0);
+      }
+      to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+      }
+    }
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(-100px, 0, 0);
+        transform: translate3d(-100px, 0, 0);
+      }
+      to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+      }
+    }
+    .fadeInLeft {
+      -webkit-animation-name: fadeInLeft;
+      animation-name: fadeInLeft;
+    }
+
+    /* fadeInUp: 下からフェードイン */
+    @-webkit-keyframes fadeInUp {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 100px, 0);
+        transform: translate3d(0, 100px, 0);
+      }
+      to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+      }
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 100px, 0);
+        transform: translate3d(0, 100px, 0);
+      }
+      to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+      }
+    }
+    .fadeInUp {
+      -webkit-animation-name: fadeInUp;
+      animation-name: fadeInUp;
+    }
+
+    /* fadeInDown: 上からフェードイン */
+    @-webkit-keyframes fadeInDown {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100px, 0);
+        transform: translate3d(0, -100px, 0);
+      }
+      to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+      }
+    }
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100px, 0);
+        transform: translate3d(0, -100px, 0);
+      }
+      to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+      }
+    }
+    .fadeInDown {
+      -webkit-animation-name: fadeInDown;
+      animation-name: fadeInDown;
+    }
+    /* ここまで追加 */
+
+    /* 商品 */
     .products {
       display: grid;
       grid-template-columns: repeat(2, 1fr) !important;
@@ -196,7 +345,6 @@
       gap: 20px;
       padding: 20px 0;
     }
-
     .product-card {
       width: 100%;
       aspect-ratio: 1 / 1;
@@ -205,35 +353,25 @@
       align-items: center;
       overflow: hidden;
     }
-
     .product-card img {
       width: 90%;
-      max-width: 900px;
       height: auto;
       object-fit: cover;
-      display: block;
       transition: transform 0.4s ease;
     }
-
-    .product-card:hover img {
-      transform: scale(1.05);
-    }
+    .product-card:hover img { transform: scale(1.05); }
 
     .video-section {
       position: relative;
       width: 100%;
       padding-top: 56.25%;
     }
-
     .video-section video {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       object-fit: contain;
     }
-
     .video-section h2 {
       position: absolute;
       top: 30%;
@@ -250,85 +388,111 @@
       color: white;
       padding: 40px 20px 20px;
     }
-
     .footer-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       max-width: 1200px;
       margin: auto;
     }
-
-    .footer-column h3 {
-      margin-bottom: 10px;
-    }
-
+    .footer-column h3 { margin-bottom: 10px; }
     .footer-column a {
       display: block;
       color: white;
       text-decoration: none;
       margin-bottom: 5px;
     }
-
-    .footer-logo {
-      text-align: right;
-    }
-
+    .footer-logo { text-align: right; }
     .footer-bottom {
       text-align: center;
       margin-top: 30px;
       font-size: 0.9em;
       color: #ccc;
     }
-
     @media (max-width: 768px) {
-      .footer-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-      .footer-logo {
-        text-align: center;
-        margin-top: 20px;
-      }
-      .products {
-        grid-template-columns: 1fr !important;
-        max-width: 100%;
-        gap: 10px;
-        padding: 10px 0;
-      }
-      .product-card img {
-        width: 100%;
-        height: auto;
-      }
+      .footer-grid { grid-template-columns: 1fr; text-align: center; }
+      .footer-logo { text-align: center; margin-top: 20px; }
+      .products { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; padding: 10px 0; }
     }
   </style>
 </head>
 <body>
   <div class="header">
+    <!-- 差し替えたハンバーガーHTML -->
     <button class="hamburger-morph" aria-label="メニュー" aria-controls="morph-menu" aria-expanded="false">
-      <svg class="hamburger-morph__icon" viewBox="0 0 100 100">
+      <svg class="hamburger-morph__icon" width="48" height="48" viewBox="0 0 100 100">
         <path class="hamburger-morph__line" d="M 20,29 H 80 C 80,29 94.5,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058" />
         <path class="hamburger-morph__line" d="M 20,50 H 80" />
         <path class="hamburger-morph__line" d="M 20,71 H 80 C 80,71 94.5,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942" />
       </svg>
     </button>
+
     <nav id="morph-menu" class="nav-morph" aria-hidden="true">
       <div class="nav-morph__wrapper">
         <ul class="nav-morph__list">
-          <li class="nav-morph__item"><a href="#" class="nav-morph__link"><span class="nav-morph__text">Home</span><span class="nav-morph__hover">ホーム</span></a></li>
-          <li class="nav-morph__item"><a href="#" class="nav-morph__link"><span class="nav-morph__text">About</span><span class="nav-morph__hover">私たちについて</span></a></li>
-          <li class="nav-morph__item"><a href="#" class="nav-morph__link"><span class="nav-morph__text">Works</span><span class="nav-morph__hover">制作実績</span></a></li>
-          <li class="nav-morph__item"><a href="#" class="nav-morph__link"><span class="nav-morph__text">Contact</span><span class="nav-morph__hover">お問い合わせ</span></a></li>
+          <li class="nav-morph__item">
+            <a href="#" class="nav-morph__link">
+              <span class="nav-morph__text">Home</span>
+              <span class="nav-morph__hover">ホーム</span>
+            </a>
+          </li>
+          <li class="nav-morph__item">
+            <a href="#" class="nav-morph__link">
+              <span class="nav-morph__text">About</span>
+              <span class="nav-morph__hover">私たちについて</span>
+            </a>
+          </li>
+          <li class="nav-morph__item">
+            <a href="#" class="nav-morph__link">
+              <span class="nav-morph__text">Works</span>
+              <span class="nav-morph__hover">制作実績</span>
+            </a>
+          </li>
+          <li class="nav-morph__item">
+            <a href="#" class="nav-morph__link">
+              <span class="nav-morph__text">Contact</span>
+              <span class="nav-morph__hover">お問い合わせ</span>
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
   </div>
 
-  <div class="slider">
-    <button class="arrow left" id="prev">&#10094;</button>
-    <button class="arrow right" id="next">&#10095;</button>
-    <div class="slide active" style="background-image: url('slide1.jpg');"></div>
-    <div class="slide" style="background-image: url('slide2.jpg');"></div>
-    <div class="slide" style="background-image: url('slide3.jpg');"></div>
+  <!-- 新スライダー -->
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+      <div class="item active">
+        <div class="fill" style="background-image:url('slide1.jpg');"></div>
+        <div class="carousel-caption">
+          <h2 class="animated fadeInLeft">Caption Animation</h2>
+          <p class="animated fadeInUp">説明文</p>
+          <a href="#" class="btn-transparent btn-rounded btn-large animated fadeInUp" style="margin-top: 20px;">詳しくはコチラ</a>
+        </div>
+      </div>
+      <div class="item">
+        <div class="fill" style="background-image:url('slide2.jpg');"></div>
+        <div class="carousel-caption">
+          <h2 class="animated fadeInDown">Caption Animation</h2>
+          <p class="animated fadeInUp">説明文</p>
+          <a href="#" class="btn-transparent btn-rounded btn-large animated fadeInUp" style="margin-top: 20px;">詳しくはコチラ</a>
+        </div>
+      </div>
+      <div class="item">
+        <div class="fill" style="background-image:url('slide3.jpg');"></div>
+        <div class="carousel-caption">
+          <h2 class="animated fadeInRight">Caption Animation</h2>
+          <p class="animated fadeInRight">説明文</p>
+          <a href="#" class="btn-transparent btn-rounded btn-large animated fadeInUp" style="margin-top: 20px;">詳しくはコチラ</a>
+        </div>
+      </div>
+    </div>
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
   </div>
 
   <section class="products">
@@ -341,7 +505,6 @@
   <section class="video-section">
     <video autoplay muted loop playsinline>
       <source src="printing-process.mp4" type="video/mp4" />
-      お使いのブラウザは video タグをサポートしていません。
     </video>
     <h2>印刷工程の様子</h2>
   </section>
@@ -365,46 +528,11 @@
     <div class="footer-bottom">©2025 Parrot3D</div>
   </footer>
 
+  <!-- jQuery & Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
   <script>
-    // スライダー
-    const slides = document.querySelectorAll('.slide');
-    const prevBtn = document.getElementById('prev');
-    const nextBtn = document.getElementById('next');
-    let current = 0;
-    let slideInterval = setInterval(nextSlide, 5000);
-
-    function showSlide(index) {
-      slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
-      });
-    }
-
-    function nextSlide() {
-      current = (current + 1) % slides.length;
-      showSlide(current);
-    }
-
-    function prevSlide() {
-      current = (current - 1 + slides.length) % slides.length;
-      showSlide(current);
-    }
-
-    nextBtn.addEventListener('click', () => {
-      nextSlide();
-      resetInterval();
-    });
-
-    prevBtn.addEventListener('click', () => {
-      prevSlide();
-      resetInterval();
-    });
-
-    function resetInterval() {
-      clearInterval(slideInterval);
-      slideInterval = setInterval(nextSlide, 5000);
-    }
-
-    // ハンバーガー
     document.addEventListener('DOMContentLoaded', () => {
       const hamburger = document.querySelector('.hamburger-morph');
       const nav = document.querySelector('.nav-morph');
@@ -412,10 +540,29 @@
       hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('active');
         nav.classList.toggle('active');
+
         const isOpen = hamburger.classList.contains('active');
         hamburger.setAttribute('aria-expanded', isOpen);
         nav.setAttribute('aria-hidden', !isOpen);
-        document.Abody.style.overflow = isOpen ? 'hidden' : '';
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      });
+
+      // メニューリンクのホバーエフェクト用のイベントリスナー
+      const menuLinks = document.querySelectorAll('.nav-morph__link');
+      menuLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          const text = link.querySelector('.nav-morph__text');
+          const hover = link.querySelector('.nav-morph__hover');
+          if (text) text.style.transform = 'translateY(-100%)';
+          if (hover) hover.style.transform = 'translateY(-100%)';
+        });
+
+        link.addEventListener('mouseleave', () => {
+          const text = link.querySelector('.nav-morph__text');
+          const hover = link.querySelector('.nav-morph__hover');
+          if (text) text.style.transform = 'translateY(0)';
+          if (hover) hover.style.transform = 'translateY(0)';
+        });
       });
     });
   </script>
